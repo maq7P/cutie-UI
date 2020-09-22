@@ -55,3 +55,30 @@ $meow.prototype.fadeOut = function (duration, finaly) {
 
     return this;
 }
+
+$meow.prototype.fadeToggle = function (duration, display = 'block', finaly) {
+    for (let i = 0; i < this.length; i++) {
+        if (window.getComputedStyle(this[i]).display == 'none'){
+             this[i].style.display = display;
+
+             const _fadeIn = (complexion) => {
+                 this[i].style.opacity = complexion;
+             };
+
+             const animation = this.animateOverTime(duration, _fadeIn, finaly);
+             requestAnimationFrame(animation);
+        } else{
+            const _fadeOut = (complexion) => {
+                this[i].style.opacity = 1 - complexion;
+                if (complexion == 1) {
+                    this[i].style.display = 'none';
+                }
+            };
+
+            const animation = this.animateOverTime(duration, _fadeOut, finaly);
+            requestAnimationFrame(animation);
+        }
+    }
+
+    return this;
+}

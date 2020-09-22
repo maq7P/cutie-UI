@@ -1867,6 +1867,233 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./src/js/library/components/card.js":
+/*!*******************************************!*\
+  !*** ./src/js/library/components/card.js ***!
+  \*******************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/library/core.js");
+ // ({settings, content});
+// settings: {
+//    count: 2,
+//    classesWrapper: []
+//},
+// content : [{
+//    href: ...,
+//    modalId: ...,
+//    datatarget: #exampleModal,
+//    title: title,
+//    desciption: desciption,
+//    img: img,
+//    classesCard: [],
+// },{}]
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.createCards = function ({
+  content,
+  commonModal
+}) {
+  const goods = document.createElement('div');
+  goods.classList.add('goods', 'd-flex', 'f-space-around', 'f-wrap');
+  let alt = 0;
+
+  for (let j = 0; j < content.length; j++) {
+    const card = document.createElement('div');
+    card.classList.add('card', 'mt10');
+    const modalId = content[j].modalId || 'none';
+    card.innerHTML = `
+            <img src="${content[j].img}" alt="photo-${alt}" class="card-img">
+            <div class="card-body">
+                <h5 class="card-title">${content[j].title}</h5>
+                <p class="card-text">${content[j].desciption}</p>
+                <a href="${content[j].href}" id="${modalId}" class="btn btn-primary" data-toggle="modal" data-target="${content[j].datatarget}">Link to</a>
+            </div>
+        `;
+    alt++;
+    goods.appendChild(card);
+  }
+
+  this[0].appendChild(goods);
+  const cards = document.querySelectorAll('.card');
+
+  const creatModal = (trigger, title, body) => {
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(trigger).click(e => {
+      e.preventDefault();
+      document.body.style.overflow = 'hidden';
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(trigger).createModal({
+        text: {
+          title,
+          body
+        },
+        btns: {
+          count: 2,
+          settings: [['Close', ['btn-danger', 'mr10'], true], ['Save changes', ['btn-success'], false, () => {
+            alert('Данные сохранены');
+          }]]
+        }
+      });
+    });
+  };
+
+  for (let j = 0; j < cards.length; j++) {
+    if (content[j].modal) {
+      const trigger = content[j].modal.trigger;
+      creatModal(trigger, content[j].modal.title, content[j].modal.body);
+    }
+  }
+
+  if (commonModal.modal.trigger) {
+    const trigger = commonModal.modal.trigger;
+    creatModal(trigger, commonModal.modal.title, commonModal.modal.body);
+  }
+};
+
+/***/ }),
+
+/***/ "./src/js/library/components/dropdown.js":
+/*!***********************************************!*\
+  !*** ./src/js/library/components/dropdown.js ***!
+  \***********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/library/core.js");
+
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.dropdown = function () {
+  for (let i = 0; i < this.length; i++) {
+    const id = this[i].getAttribute('id');
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).click(() => {
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(`[data-toggle-id="${id}"]`).fadeToggle(300);
+    });
+  }
+};
+
+Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.dropdown-toggle').dropdown();
+
+/***/ }),
+
+/***/ "./src/js/library/components/modal.js":
+/*!********************************************!*\
+  !*** ./src/js/library/components/modal.js ***!
+  \********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
+/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../core */ "./src/js/library/core.js");
+
+
+
+_core__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.modal = function (created) {
+  for (let i = 0; i < this.length; i++) {
+    const target = this[i].getAttribute('data-target'); // console.log(target);
+
+    Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(this[i]).click(e => {
+      e.preventDefault();
+      Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target).fadeIn(500);
+      document.body.style.overflow = 'hidden';
+    });
+    const closeElements = document.querySelectorAll(`[data-close]`);
+    closeElements.forEach(elem => {
+      Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(elem).click(e => {
+        Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target).fadeOut(500);
+        document.body.style.overflow = '';
+
+        if (created) {
+          document.querySelectorAll(target).forEach(elem => {
+            elem.remove();
+          });
+        }
+      });
+    });
+    Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target).click(e => {
+      if (e.target.classList.contains('modal')) {
+        Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target).fadeOut(500);
+        document.body.style.overflow = '';
+
+        if (created) {
+          document.querySelectorAll(target).forEach(elem => {
+            elem.remove();
+          });
+        }
+      }
+    });
+  }
+};
+
+Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])('[data-toggle="modal"]').modal();
+
+_core__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.createModal = function ({
+  text,
+  btns
+} = {}) {
+  for (let i = 0; i < this.length; i++) {
+    // Чтобы при одинаковых data-target создавалось одно окно.
+    if (this[0].getAttribute('data-target') === this[i].getAttribute('data-target') && i != 0) {
+      continue;
+    }
+
+    ;
+    let modal = document.createElement('div');
+    modal.classList.add('modal');
+    modal.setAttribute('id', this[i].getAttribute('data-target').slice(1)); // btns = {count: num, settings: [[text, classNames=[], close, cb]]}
+
+    const buttons = [];
+
+    for (let j = 0; j < btns.count; j++) {
+      let btn = document.createElement('button');
+      btn.classList.add('btn', ...btns.settings[j][1]);
+      btn.textContent = btns.settings[j][0];
+
+      if (btns.settings[j][2]) {
+        btn.setAttribute('data-close', 'true');
+      }
+
+      if (btns.settings[j][3] && typeof btns.settings[j][3] === 'function') {
+        btn.addEventListener('click', btns.settings[j][3]);
+      }
+
+      buttons.push(btn);
+    }
+
+    modal.innerHTML = `
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button class="close" data-close>
+                    <span>&times;</span>
+                </button>
+                <div class="modal-header">
+                    <div class="modal-title">
+                        ${text.title}
+                    </div>
+                </div>
+                <div class="modal-body">
+                    ${text.body}
+                </div>
+                <div class="modal-footer">
+                    
+                </div>
+            </div>
+        </div>
+        `;
+    modal.querySelector(".modal-footer").append(...buttons);
+    document.body.appendChild(modal);
+    Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(this[i]).modal(true);
+    Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(this[i].getAttribute('data-target')).fadeIn(500);
+  }
+};
+
+/***/ }),
+
 /***/ "./src/js/library/core.js":
 /*!********************************!*\
   !*** ./src/js/library/core.js ***!
@@ -1882,11 +2109,11 @@ const $meow = function (selector) {
 
 $meow.prototype.init = function (selector) {
   if (!selector) {
-    return this; // will just empty object {}
+    return this; // {}
   }
 
   if (selector.tagName) {
-    this[0] = select;
+    this[0] = selector;
     this.length = 1;
     return this;
   }
@@ -1917,6 +2144,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_handlers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/handlers */ "./src/js/library/modules/handlers.js");
 /* harmony import */ var _modules_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/actions */ "./src/js/library/modules/actions.js");
 /* harmony import */ var _modules_effects__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/effects */ "./src/js/library/modules/effects.js");
+/* harmony import */ var _components_dropdown__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/dropdown */ "./src/js/library/components/dropdown.js");
+/* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/modal */ "./src/js/library/components/modal.js");
+/* harmony import */ var _components_card__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/card */ "./src/js/library/components/card.js");
+
+
+
 
 
 
@@ -2238,6 +2471,34 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeOut = function (dura
   return this;
 };
 
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeToggle = function (duration, display = 'block', finaly) {
+  for (let i = 0; i < this.length; i++) {
+    if (window.getComputedStyle(this[i]).display == 'none') {
+      this[i].style.display = display;
+
+      const _fadeIn = complexion => {
+        this[i].style.opacity = complexion;
+      };
+
+      const animation = this.animateOverTime(duration, _fadeIn, finaly);
+      requestAnimationFrame(animation);
+    } else {
+      const _fadeOut = complexion => {
+        this[i].style.opacity = 1 - complexion;
+
+        if (complexion == 1) {
+          this[i].style.display = 'none';
+        }
+      };
+
+      const animation = this.animateOverTime(duration, _fadeOut, finaly);
+      requestAnimationFrame(animation);
+    }
+  }
+
+  return this;
+};
+
 /***/ }),
 
 /***/ "./src/js/library/modules/handlers.js":
@@ -2276,7 +2537,7 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.off = function (eventNam
   return this;
 };
 
-_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.scratches = function (handler) {
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.click = function (handler) {
   for (let i = 0; i < this.length; i++) {
     if (handler) {
       this[i].addEventListener('click', handler);
@@ -2301,13 +2562,106 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.scratches = function (ha
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./library/lib */ "./src/js/library/lib.js");
 
-$meow('.active').scratches();
 
-function say() {
-  console.log('Hi');
-}
+Object(_library_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.container').createCards({
+  content: [{
+    href: '#',
+    modalId: 'trigger',
+    datatarget: '#exampleModal',
+    title: 'title',
+    desciption: 'desciption',
+    img: 'https://photolemur.com/img/home/top-slider/after-1440.jpg' // modal: {
+    //     trigger: '#trigger1',
+    //     title: 'Modal Title',
+    //     body: `1`,
+    // },
 
-$meow('.active').fadeOutUp(2000);
+  }, {
+    href: '#',
+    modalId: 'trigger',
+    datatarget: '#exampleModal',
+    title: 'title',
+    desciption: 'desciption',
+    img: 'https://photolemur.com/img/home/top-slider/after-1440.jpg' // modal: {
+    //     trigger: '#trigger2',
+    //     title: 'Modal Title',
+    //     body: `2`,
+    // },
+
+  }, {
+    href: '#',
+    modalId: 'trigger',
+    datatarget: '#exampleModal',
+    title: 'title',
+    desciption: 'desciption',
+    img: 'https://photolemur.com/img/home/top-slider/after-1440.jpg' // modal: {
+    //     trigger: '#trigger3',
+    //     title: 'Modal Title',
+    //     body: `3`,
+    // },
+
+  }, {
+    href: '#',
+    modalId: 'trigger',
+    datatarget: '#exampleModal',
+    title: 'title',
+    desciption: 'desciption',
+    img: 'https://photolemur.com/img/home/top-slider/after-1440.jpg' // modal: {
+    //     trigger: '#trigger3',
+    //     title: 'Modal Title',
+    //     body: `3`,
+    // },
+
+  }, {
+    href: '#',
+    modalId: 'trigger',
+    datatarget: '#exampleModal',
+    title: 'title',
+    desciption: 'desciption',
+    img: 'https://klike.net/uploads/posts/2019-06/1560664221_1.jpg' // modal: {
+    //     trigger: '#trigger3',
+    //     title: 'Modal Title',
+    //     body: `3`,
+    // },
+
+  }],
+  commonModal: {
+    modal: {
+      trigger: '#trigger',
+      title: 'Modal Title',
+      body: `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed,
+                        perferendis ea!Pariatur omnis aliquam quod
+                        fugit quibusdam ? Nam, est aliquid ?`
+    }
+  }
+}); // $meow('#trigger').click(() => {
+//     $meow('#trigger').createModal({
+//         text: {
+//             title: 'Modal Title',
+//             body: `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed,
+//                 perferendis ea!Pariatur omnis aliquam quod
+//                 fugit quibusdam ? Nam, est aliquid ?`
+//         },
+//         btns: {
+//             count: 2,
+//             settings: [
+//                 [
+//                     'Close',
+//                     ['btn-danger', 'mr10'],
+//                     true
+//                 ],
+//                 [
+//                     'Save changes',
+//                     ['btn-success'],
+//                     false,
+//                     () => {
+//                         alert('Данные сохранены');
+//                     }
+//                 ]
+//             ]
+//         }
+//     });
+// })
 
 /***/ })
 

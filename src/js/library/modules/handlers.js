@@ -20,7 +20,7 @@ $meow.prototype.off = function(eventName, callBack){
     return this;
 }
 
-$meow.prototype.scratches = function (handler) {
+$meow.prototype.click = function (handler) {
     for (let i = 0; i < this.length; i++) {
         if (handler) {
             this[i].addEventListener('click', handler);
